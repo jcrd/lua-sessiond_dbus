@@ -32,6 +32,9 @@ session.backlights.intel_backlight.dec_brightness(100)
 session.lock()
 ```
 
+See the [API documentation](https://jcrd.github.io/lua-sessiond_dbus/) for
+descriptions of all functions.
+
 ## License
 
 lua-sessiond_dbus is licensed under the MIT License (see [LICENSE](LICENSE)).
