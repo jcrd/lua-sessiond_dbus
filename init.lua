@@ -21,6 +21,13 @@
     -- Lock the session.
     session.lock()
 
+    -- Connect callback to sessiond DBus signal.
+    session.connect_signal("PrepareForSleep", function (state)
+        if state then
+            print("Preparing for sleep...")
+        end
+    end)
+
     @author James Reed <jcrd@tuta.io>
     @copyright 2020 James Reed
     @license MIT
@@ -31,6 +38,7 @@ local dbus = require("dbus_proxy")
 
 local session = {}
 local backlights = {}
+local callbacks = {}
 session.backlights = {}
 session.on_backlight_error = function () end
 
@@ -112,6 +120,11 @@ local function callback(p, appear)
         end
         p:connect_signal(add_backlight, "AddBacklight")
         p:connect_signal(remove_backlight, "RemoveBacklight")
+
+        for _, cb in ipairs(callbacks) do
+            p:connect_signal(cb.func, cb.name)
+        end
+        callbacks = {}
     else
         for n in pairs(backlights) do
             backlights[n] = nil
@@ -137,6 +150,19 @@ function session.lock()
             return false
         end
         return true
+    end
+end
+
+--- Connect callback to sessiond DBus signal.
+--
+-- @param name Name of signal.
+-- @param cb Callback function.
+-- @function connect_signal
+function session.connect_signal(name, cb)
+    if proxy.is_connected then
+        proxy:connect_signal(cb, name)
+    else
+        table.insert(callbacks, {name=name, func=cb})
     end
 end
 
