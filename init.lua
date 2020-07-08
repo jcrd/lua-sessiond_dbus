@@ -21,6 +21,12 @@
     -- Lock the session.
     session.lock()
 
+    -- Inhibit.
+    id = session.inhibit('chromium', 'media')
+
+    -- Stop inhibitor.
+    session.uninhibit(id)
+
     -- Connect callback to sessiond DBus signal.
     session.connect_signal("PrepareForSleep", function (state)
         if state then
@@ -144,12 +150,29 @@ local proxy = dbus.monitored.new({
 -- @function lock
 function session.lock()
     if proxy.is_connected then
-        _, err = proxy:Lock()
-        if err then
-            io.stderr:write(err)
-            return false
-        end
-        return true
+        return proxy:Lock()
+    end
+end
+
+--- Inhibit inactivity.
+--
+-- @param who A string describing who is inhibiting.
+-- @param why A string describing why the inhibitor is running.
+-- @return An ID used to stop the inhibitor.
+-- @function inhibit
+function session.inhibit(who, why)
+    if proxy.is_connected then
+        return proxy:Inhibit(who, why)
+    end
+end
+
+--- Stop an inhibitor.
+--
+-- @param id The ID of the inhibitor to stop.
+-- @function uninhibit
+function session.uninhibit(id)
+    if proxy.is_connected then
+        proxy:Uninhibit(id)
     end
 end
 
