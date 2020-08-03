@@ -162,7 +162,7 @@ end
 -- @function inhibit
 function session.inhibit(who, why)
     if proxy.is_connected then
-        return proxy:Inhibit(who, why)
+        return proxy:Inhibit(who or '', why or '')
     end
 end
 
