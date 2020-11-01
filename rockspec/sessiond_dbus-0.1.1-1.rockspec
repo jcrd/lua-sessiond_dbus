@@ -1,8 +1,8 @@
 package = "sessiond_dbus"
-version = "0.1.0-1"
+version = "0.1.1-1"
 source = {
     url = "git://github.com/jcrd/lua-sessiond_dbus",
-    tag = "v0.1.0",
+    tag = "v0.1.1",
 }
 description = {
     summary = "A library for interfacing with the sessiond DBus service",
