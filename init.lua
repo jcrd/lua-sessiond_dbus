@@ -111,6 +111,7 @@ local function remove_backlight(_, path)
     for n, bl in pairs(backlights) do
         if bl.obj_path == path then
             backlights[n] = nil
+            return
         end
     end
 end
