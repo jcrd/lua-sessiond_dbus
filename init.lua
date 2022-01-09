@@ -6,11 +6,8 @@
     @usage
     session = require("sessiond_dbus")
 
-    -- Set the step by which the 'default' backlight's brightness will be changed.
-    session.backlights.default.brightness_step = 10
-
     -- Increase the 'default' backlight's brightness by 10.
-    session.backlights.default.inc_brightness()
+    session.backlights.default.inc_brightness(10)
 
     -- Set the 'default' backlight's brightness to 50.
     session.backlights.default.set_brightness(50)
@@ -77,22 +74,21 @@ local function new_backlight(path)
         interface = "org.sessiond.session1.Backlight",
         path = path,
     }
-    bl.brightness_step = 10
 
     --- Increase backlight brightness.
     --
-    -- @param i Increase by given value or session.backlights.default.brightness_step
+    -- @param i Increase by given value
     -- @function backlights.default.inc_brightness
     function bl.inc_brightness(i)
-        bl.proxy:IncBrightness(i or bl.brightness_step)
+        bl.proxy:IncBrightness(i)
     end
 
     --- Decrease backlight brightness.
     --
-    -- @param i Decrease by given value or session.backlights.default.brightness_step
+    -- @param i Decrease by given value
     -- @function backlights.default.dec_brightness
     function bl.dec_brightness(i)
-        bl.proxy:IncBrightness(-1 * (i or bl.brightness_step))
+        bl.proxy:IncBrightness(-i)
     end
 
     --- Set backlight brightness.
