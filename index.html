@@ -49,17 +49,20 @@
     <ul>
         <pre class="example">session = require(&quot;sessiond_dbus&quot;)
 
--- Set the step by which the &apos;default&apos; backlight&apos;s brightness will be changed.
-session.backlights.default.brightness_step = 10
-
 -- Increase the &apos;default&apos; backlight&apos;s brightness by 10.
-session.backlights.default.inc_brightness()
+session.backlights.default.inc_brightness(10)
 
 -- Set the &apos;default&apos; backlight&apos;s brightness to 50.
 session.backlights.default.set_brightness(50)
 
 -- Decrease &apos;intel_backlight&apos; brightness by 100.
 session.backlights.intel_backlight.dec_brightness(100)
+
+-- Increase the &apos;default&apos; audio sink&apos;s volume by 0.1.
+session.audiosinks.default.inc_volume(0.1)
+
+-- Toggle the &apos;default&apos; audio sink&apos;s mute state.
+session.audiosinks.default.toggle_mute()
 
 -- Lock the session.
 session.lock()
@@ -74,6 +77,13 @@ session.uninhibit(id)
 session.connect_signal(&quot;PrepareForSleep&quot;, function (state)
     if state then
         print(&quot;Preparing for sleep...&quot;)
+    end
+end)
+
+-- Add function to be called when the DBus service appears.
+session.add_hook(function (appear)
+    if appear then
+        print(&quot;Service appeared&quot;)
     end
 end)
 </pre>
@@ -101,6 +111,30 @@ end)
 	<td class="summary">Set backlight brightness.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.inc_volume">audiosinks.default.inc_volume (i)</a></td>
+	<td class="summary">Increase audio sink volume.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.dec_volume">audiosinks.default.dec_volume (i)</a></td>
+	<td class="summary">Decrease audio sink volume.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.set_volume">audiosinks.default.set_volume (i)</a></td>
+	<td class="summary">Set audio sink volume.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.set_mute">audiosinks.default.set_mute (m)</a></td>
+	<td class="summary">Set audio sink mute state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.toggle_mute">audiosinks.default.toggle_mute ()</a></td>
+	<td class="summary">Toggle audio sink mute state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audiosinks.default.update">audiosinks.default.update ()</a></td>
+	<td class="summary">Call <code>on_default_audiosink_change</code> function if sink is default.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#lock">lock ()</a></td>
 	<td class="summary">Lock the current session.</td>
 	</tr>
@@ -115,6 +149,14 @@ end)
 	<tr>
 	<td class="name" nowrap><a href="#connect_signal">connect_signal (name, cb)</a></td>
 	<td class="summary">Connect callback to sessiond DBus signal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#add_hook">add_hook (func)</a></td>
+	<td class="summary">Add a function to be called when the DBus service appears or disappears.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#connect">connect ()</a></td>
+	<td class="summary">Connect to sessiond DBus service.</td>
 	</tr>
 </table>
 
@@ -136,7 +178,7 @@ end)
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">i</span>
-         Increase by given value or session.backlights.default.brightness_step
+         Increase by given value
         </li>
     </ul>
 
@@ -156,7 +198,7 @@ end)
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">i</span>
-         Decrease by given value or session.backlights.default.brightness_step
+         Decrease by given value
         </li>
     </ul>
 
@@ -179,6 +221,114 @@ end)
          Brightness value
         </li>
     </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.inc_volume"></a>
+    <strong>audiosinks.default.inc_volume (i)</strong>
+    </dt>
+    <dd>
+    Increase audio sink volume.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">i</span>
+         Increase by given value
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.dec_volume"></a>
+    <strong>audiosinks.default.dec_volume (i)</strong>
+    </dt>
+    <dd>
+    Decrease audio sink volume.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">i</span>
+         Decrease by given value
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.set_volume"></a>
+    <strong>audiosinks.default.set_volume (i)</strong>
+    </dt>
+    <dd>
+    Set audio sink volume.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">i</span>
+         Volume value
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.set_mute"></a>
+    <strong>audiosinks.default.set_mute (m)</strong>
+    </dt>
+    <dd>
+    Set audio sink mute state.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">m</span>
+         Mute state
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.toggle_mute"></a>
+    <strong>audiosinks.default.toggle_mute ()</strong>
+    </dt>
+    <dd>
+    Toggle audio sink mute state.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audiosinks.default.update"></a>
+    <strong>audiosinks.default.update ()</strong>
+    </dt>
+    <dd>
+    Call <code>on_default_audiosink_change</code> function if sink is default.
+
+
 
 
 
@@ -270,6 +420,40 @@ end)
 
 
 </dd>
+    <dt>
+    <a name = "add_hook"></a>
+    <strong>add_hook (func)</strong>
+    </dt>
+    <dd>
+    Add a function to be called when the DBus service appears or disappears.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">func</span>
+         Hook function, with appear state as its only argument.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "connect"></a>
+    <strong>connect ()</strong>
+    </dt>
+    <dd>
+    Connect to sessiond DBus service.
+
+
+
+
+
+
+
+</dd>
 </dl>
 
 
@@ -277,7 +461,7 @@ end)
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2020-08-05 14:33:15 </i>
+<i style="float:right;">Last updated 2022-01-24 17:52:49 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
